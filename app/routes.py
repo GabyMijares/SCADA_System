@@ -38,7 +38,8 @@ def dashboard():
     'conv_tqc':{1:'Full', 2:'3/4', 3:'1/2', 4:'1/4', 5:'Dañado'},
     'conv_tsb':{1:'Full', 2:'Vacio', 3:'Llenando'},
     'conv_status':{0:'OFF', 1:'ON'},
-    'conv_alarmas':{0:'Ok', 1:'Falla inicio', 2:'Alta temp', 3:'Baja presion', 4:'Sobrevelocidad'}
+    'conv_alarmas':{0:'Ok', 1:'Falla inicio', 2:'Alta temp', 3:'Baja presion', 4:'Sobrevelocidad'},
+    'state':state
     }
     return render_template('dashboard.html',  context=context)
 
@@ -54,11 +55,15 @@ def send_data():
         encendido=data['encendido'] )
     db.session.add(resp)
     db.session.commit()
-    status = {'msg':'N'}
-    return jsonify(status)
+    msg = {'msg':False}
+    if 'action' in state.keys():
+        msg.update({'msg': 'N' if state.pop('action') else 'O'})
+    return jsonify(msg)
 
 @app.route('/api/v0/switch', methods=['POST'])
 def switch():
     data  = request.get_json()
     print(data)
     state.update(data)
+    status = {'msg':'ok'}
+    return jsonify(status)

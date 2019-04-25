@@ -32,6 +32,15 @@ while True:
 		'http://127.0.0.1:5000/api/v0/send_data',
 		body=encoded_data,
 		headers={'Content-Type': 'application/json'})
-	print(r.data)
+	r = json.loads(r.data.decode('utf-8'))
+
+	if r['msg']:
+		if r['msg'] == 'N':
+			print('ENCENDIENDO!')
+			ser.write(b'N')
+		elif r['msg'] == 'O':
+			print('APAGANDO!')
+			ser.write(b'O')
+
 	# Tiempo entre ciclos
 	time.sleep(3)
