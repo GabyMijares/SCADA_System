@@ -21,12 +21,12 @@
                     <i class="material-icons">content_copy</i>
                   </div>
                   <p class="card-category">Tanque externo</p>
-                  <h3 class="card-title"> {{ context.conv_tqc[context['data'].var_tqc] }}
+                  <h3 class="card-title" id='tqc'> {{ context.conv_tqc[context['data'].var_tqc] }}
                   </h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <span>Actualizado {{ moment(context['data'].fecha).fromNow() }}</span>
+                    <span>Actualizado {{ moment(context['data'].fecha).fromNow(refresh=True) }}</span>
                   </div>
                 </div>
               </div>
@@ -38,7 +38,7 @@
                     <i class="material-icons">store</i>
                   </div>
                   <p class="card-category">Tanque interno</p>
-                  <h3 class="card-title">{{ context.conv_tsb[context['data'].var_tsb] }}</h3>
+                  <h3 class="card-title" id="tsb">{{ context.conv_tsb[context['data'].var_tsb] }}</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -54,7 +54,7 @@
                     <i class="material-icons">info_outline</i>
                   </div>
                   <p class="card-category">Estado</p>
-                  <h3 class="card-title">{{ context.conv_status[context['data'].encendido] }}</h3>
+                  <h3 class="card-title" id="on_off">{{ context.conv_status[context['data'].encendido] }}</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -71,9 +71,9 @@
                   </div>
                   <p class="card-category">Electricidad</p>
                   {% if context['data'].volt_ky < 195 %}
-                  <h3 class="card-title">No hay</h3>
+                  <h3 class="card-title" id="luz">No hay</h3>
                   {% else %}
-                  <h3 class="card-title">Si hay</h3>
+                  <h3 class="card-title" id="luz">Si hay</h3>
                   {% endif %}
                 </div>
                 <div class="card-footer">
@@ -139,4 +139,8 @@
       </div>
 
  
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='assets/js/temporizador.js')}}"></script>
 {% endblock %}

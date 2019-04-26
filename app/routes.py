@@ -1,14 +1,21 @@
 from app import app, db
-from flask import render_template, flash, redirect, request, url_for, jsonify
+from flask import render_template, flash, redirect, request, url_for, jsonify, g
+from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from flask_login import login_user, logout_user, current_user, login_required
 from app.models import User, Respuesta
 from app.forms import LoginForm
+from app.helper import error_response, translate
 from werkzeug.urls import url_parse
+
+basic_auth = HTTPBasicAuth()
+token_auth = HTTPTokenAuth()
 
 state = {}
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -35,16 +42,51 @@ def dashboard():
     q = Respuesta.query.order_by(Respuesta.id.desc()).first_or_404()
     context = { 
     'data': q,
-    'conv_tqc':{1:'Full', 2:'3/4', 3:'1/2', 4:'1/4', 5:'Dañado'},
-    'conv_tsb':{1:'Full', 2:'Vacio', 3:'Llenando'},
-    'conv_status':{0:'OFF', 1:'ON'},
-    'conv_alarmas':{0:'Ok', 1:'Falla inicio', 2:'Alta temp', 3:'Baja presion', 4:'Sobrevelocidad'},
+    'conv_tqc':translate['conv_tqc'],
+    'conv_tsb':translate['conv_tsb'],
+    'conv_status':translate['conv_status'],
+    'conv_alarmas':translate['conv_alarmas'],
     'state':state
     }
     return render_template('dashboard.html',  context=context)
 
 
+'''
+    En la siguiente parte se realiza
+    todo lo necesario para la API
+
+'''
+
+@basic_auth.verify_password
+def verify_password(email, password):
+    user = User.query.filter_by(email=email).first()
+    if user is None:
+        return False
+    g.current_user = user
+    return user.check_password(password)
+    
+@basic_auth.error_handler
+def basic_auth_error():
+    return error_response(401)
+
+@token_auth.verify_token
+def verify_token(token):
+    g.current_user = User.check_token(token) if token else None
+    return g.current_user is not None
+
+@token_auth.error_handler
+def token_auth_error():
+    return error_response(401)
+
+@app.route('/api/v0/tokens', methods=['POST'])
+@basic_auth.login_required
+def get_token():
+    token = g.current_user.get_token()
+    db.session.commit()
+    return jsonify({'token': token})
+
 @app.route('/api/v0/send_data', methods=['POST'])
+@token_auth.login_required
 def send_data():
     data  = request.get_json()
     print(data)
@@ -61,9 +103,15 @@ def send_data():
     return jsonify(msg)
 
 @app.route('/api/v0/switch', methods=['POST'])
+@login_required
 def switch():
     data  = request.get_json()
     print(data)
     state.update(data)
     status = {'msg':'ok'}
     return jsonify(status)
+
+@app.route('/api/v0/get_data'  , methods=['GET'])
+@login_required
+def get_data():
+    return jsonify(Respuesta.query.order_by(Respuesta.id.desc()).first_or_404().to_dict())
