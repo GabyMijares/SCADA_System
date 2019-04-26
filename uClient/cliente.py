@@ -43,4 +43,4 @@ while True:
 			ser.write(b'O')
 
 	# Tiempo entre ciclos
-	time.sleep(3)
+	time.sleep(5)
