@@ -10,7 +10,6 @@ password="123456"
 token=""
 
 
-
 while True:
 	data = {
 	'volt_pe': 200,
@@ -26,7 +25,6 @@ while True:
 
 	if token:
 		encoded_data = json.dumps(data).encode('utf-8')
-		headers = urllib3.util.make_headers(basic_auth='sauloviedo@gmail.com:123456')
 		headers = ({'Content-Type': 'application/json','Authorization': 'Bearer {}'.format(token)})
 		r = http.request('POST','http://127.0.0.1:5000/api/v0/send_data',body=encoded_data,	headers=headers)
 		if r.status == 200:
@@ -44,7 +42,6 @@ while True:
 			if 'token' in r.keys():
 				token = r['token']
 				print('Nuevo token!')
-		# Tiempo entre ciclos
 	else:
 			headers = urllib3.util.make_headers(basic_auth='{}:{}'.format(email,password))
 			headers.update({'Content-Type': 'application/json'})
@@ -53,4 +50,6 @@ while True:
 			if 'token' in r.keys():
 				token = r['token']
 				print('Nuevo token!')
+
+	# Tiempo entre ciclos
 	time.sleep(5)

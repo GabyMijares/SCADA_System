@@ -5,3 +5,4 @@ __pycache__/
 scss/
 .vscode/
 app.db
+uClient/cliente-simulation.py
