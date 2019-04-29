@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
       <div class="content">
         <div class="container-fluid">
           {% if context['data'].alarma != 0 %}
           <div class="row">
             <div class='col-sm-12'>
               <div class="alert alert-danger alert-with-icon" data-notify="container">
-                <i class="material-icons" data-notify="icon">add_alert</i>
+                <i class="material-icons" data-notify="icon">priority_high</i>
                 <span data-notify="message"><b>¡Advertencia!</b> {{ context.conv_alarmas[context['data'].alarma] }}</span>
               </div>              
             </div>
@@ -16,9 +17,46 @@
           <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">flash_on</i>
+                    <!--<i class="material-icons">offline_bolt</i>-->
+                  </div>
+                  <p class="card-category">Planta eléctrica</p>
+                  <h3 class="card-title" id="on_off">{{ context.conv_status[context['data'].encendido] }}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <span>Actualizado {{ moment(context['data'].fecha).fromNow() }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">wb_incandescent</i>
+                  </div>
+                  <p class="card-category">Electricidad</p>
+                  {% if context['data'].volt_ky < 195 %}
+                  <h3 class="card-title" id="luz">No hay</h3>
+                  {% else %}
+                  <h3 class="card-title" id="luz">Si hay</h3>
+                  {% endif %}
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <span>Actualizado {{ moment(context['data'].fecha).fromNow() }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
                 <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
-                    <i class="material-icons">content_copy</i>
+                    <i class="material-icons">ev_station</i>
                   </div>
                   <p class="card-category">Tanque externo</p>
                   <h3 class="card-title" id='tqc'> {{ context.conv_tqc[context['data'].var_tqc] }}
@@ -35,46 +73,10 @@
               <div class="card card-stats">
                 <div class="card-header card-header-success card-header-icon">
                   <div class="card-icon">
-                    <i class="material-icons">store</i>
+                    <i class="material-icons">opacity</i>
                   </div>
                   <p class="card-category">Tanque interno</p>
                   <h3 class="card-title" id="tsb">{{ context.conv_tsb[context['data'].var_tsb] }}</h3>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <span>Actualizado {{ moment(context['data'].fecha).fromNow() }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-danger card-header-icon">
-                  <div class="card-icon">
-                    <i class="material-icons">info_outline</i>
-                  </div>
-                  <p class="card-category">Estado</p>
-                  <h3 class="card-title" id="on_off">{{ context.conv_status[context['data'].encendido] }}</h3>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <span>Actualizado {{ moment(context['data'].fecha).fromNow() }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-info card-header-icon">
-                  <div class="card-icon">
-                    <i class="fa fa-twitter"></i>
-                  </div>
-                  <p class="card-category">Electricidad</p>
-                  {% if context['data'].volt_ky < 195 %}
-                  <h3 class="card-title" id="luz">No hay</h3>
-                  {% else %}
-                  <h3 class="card-title" id="luz">Si hay</h3>
-                  {% endif %}
                 </div>
                 <div class="card-footer">
                   <div class="stats">
