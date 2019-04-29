@@ -49,10 +49,21 @@ def dashboard():
     'state':state
     }
     return render_template('dashboard.html',  context=context)
+    
 
-#@app.route('/tables')
-#def tables():
- #   return render_template('tables.html',  context=context)
+@app.route('/tables')
+def tables():
+
+    q = Respuesta.query.order_by(Respuesta.id.desc()).first_or_404()
+    context = { 
+    'data': q,
+    'conv_tqc':translate['conv_tqc'],
+    'conv_tsb':translate['conv_tsb'],
+    'conv_status':translate['conv_status'],
+    'conv_alarmas':translate['conv_alarmas'],
+    'state':state
+    }
+    return render_template('tables.html',  context=context)
 
 
 '''
