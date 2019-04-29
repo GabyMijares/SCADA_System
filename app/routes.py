@@ -50,6 +50,10 @@ def dashboard():
     }
     return render_template('dashboard.html',  context=context)
 
+#@app.route('/tables')
+#def tables():
+ #   return render_template('tables.html',  context=context)
+
 
 '''
     En la siguiente parte se realiza
