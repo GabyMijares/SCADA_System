@@ -6,3 +6,5 @@ scss/
 .vscode/
 app.db
 uClient/cliente-simulation.py
+app/static/material-dashboard-master
+app/static/uploads/*

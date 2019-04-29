@@ -90,11 +90,19 @@ def get_token():
 def send_data():
     data  = request.get_json()
     print(data)
+    group = Respuesta.query.order_by(Respuesta.id.desc()).first()
+    if group:
+        if ( group.encendido == data['encendido']):
+            group=group.grp
+        else:
+            group=group.grp+1
+    else:
+        group=0
     resp = Respuesta(volt_pe=data['volt_pe'], volt_ky=data['volt_ky'], \
         volt_bat=data['volt_bat'], var_tqc=data['var_tqc'], \
         var_tsb=data['var_tsb'], corriente=data['corriente'], \
         presion=data['presion'], alarma=data['alarma'], \
-        encendido=data['encendido'] )
+        encendido=data['encendido'], grp=group )
     db.session.add(resp)
     db.session.commit()
     msg = {'msg':False}

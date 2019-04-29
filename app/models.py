@@ -50,6 +50,7 @@ class User(UserMixin, db.Model):
 
 class Respuesta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    grp = db.Column(db.Integer, index=True)
     volt_pe = db.Column(db.Float)
     volt_ky = db.Column(db.Float)
     volt_bat = db.Column(db.Float)
