@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table text-center">
                       <thead class=" text-primary">
                         <th>
                           Encendido
@@ -24,41 +24,33 @@
                         <th>
                           Duración
                         </th>
-                      </thead>
+                        <th>
+                          Corriente promedio
+                        </th>
+                        <th>
+                          Presion promedio
+                        </th>
+                       </thead>
                       <tbody>
+                      {% for r in context['table'] %}
                         <tr>
                           <td>
-                            05:40:00 am
+                            {{ moment(r.inicio).calendar() }}
                           </td>
                           <td>
-                            06:40:00 am
+                            {{ moment(r.final).calendar() }}
                           </td>
                           <td>
-                            Una hora
+                            {{ r.final - r.inicio }}
+                          </td>
+                          <td>
+                            {{ r.avgcorriente }}
+                          </td>
+                          <td>
+                            {{ r.avgpresion }}
                           </td>
                         </tr>
-                        <tr>
-                          <td>
-                            05:40:00 am
-                          </td>
-                          <td>
-                            06:40:00 am
-                          </td>
-                          <td>
-                            Una hora
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            05:40:00 am
-                          </td>
-                          <td>
-                            06:40:00 am
-                          </td>
-                          <td>
-                            Una hora
-                          </td>
-                        </tr>
+                      {% endfor %}
                       </tbody>
                     </table>
                   </div>

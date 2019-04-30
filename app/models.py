@@ -66,7 +66,7 @@ class Respuesta(db.Model):
         data = {
             'id':self.id,
             'volt_pe':self.volt_pe,
-            'volt_ky':self.volt_ky,
+            'volt_ky':"Si hay" if (self.volt_ky >200) else "No hay",
             'volt_bat':self.volt_bat,
             'var_tqc':translate['conv_tqc'][self.var_tqc],
             'var_tsb':translate['conv_tsb'][self.var_tsb],
