@@ -1,8 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    {% for r in context['data'] %}
-    <div><p>{{ r.fecha }} says: <b>{{ r.volt_ky }}</b></p></div>
-    {% endfor %}
-{% endblock %}

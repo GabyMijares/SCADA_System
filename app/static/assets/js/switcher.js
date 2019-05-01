@@ -1,6 +1,7 @@
 $(function() {
     $('#switcher').on("click", function(){
-        data = {"action": ($(this).attr('data-state')=="True")? 'N':'O'}
+        data = {"action": ($(this).data('state')=="True")? 'N':'O'}
+        console.log(data)
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let loadInfo = {
