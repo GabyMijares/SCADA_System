@@ -10,6 +10,10 @@ except Exception as e:
 
 http = urllib3.PoolManager()
 
+email= "wgaby@gmail.com"
+password="123456"
+token=""
+
 while True:
 	ser.write(b'Z')
 	trama = ser.readline()
@@ -26,21 +30,35 @@ while True:
 	'alarma': valores[7],
 	'encendido': valores[8]
 	}
-	encoded_data = json.dumps(data).encode('utf-8')
-	r = http.request(
-		'POST',
-		'http://127.0.0.1:5000/api/v0/send_data',
-		body=encoded_data,
-		headers={'Content-Type': 'application/json'})
-	r = json.loads(r.data.decode('utf-8'))
 
-	if r['msg']:
-		if r['msg'] == 'N':
-			print('ENCENDIENDO!')
-			ser.write(b'N')
-		elif r['msg'] == 'O':
-			print('APAGANDO!')
-			ser.write(b'O')
+	if token:
+		encoded_data = json.dumps(data).encode('utf-8')
+		headers = ({'Content-Type': 'application/json','Authorization': 'Bearer {}'.format(token)})
+		r = http.request('POST','http://192.168.1.114:5000/api/v0/send_data',body=encoded_data,	headers=headers)
+		if r.status == 200:
+			r = json.loads(r.data.decode('utf-8'))
+			if 'msg' in r.keys():
+				if r['msg'] == 'N':
+					print('APAGANDO!')
+					ser.write(b'N')
+				elif r['msg'] == 'O':
+					print('ENCENDIENDO!')
+					ser.write(b'O')
+		else:
+			headers = urllib3.util.make_headers(basic_auth='{}:{}'.format(email,password))
+			headers.update({'Content-Type': 'application/json'})
+			r = http.request('POST','http://192.168.1.114:5000/api/v0/tokens', headers=headers)
+			r = json.loads(r.data.decode('utf-8'))
+			if 'token' in r.keys():
+				token = r['token']
+				print('Nuevo token!')
+	else:
+			headers = urllib3.util.make_headers(basic_auth='{}:{}'.format(email,password))
+			headers.update({'Content-Type': 'application/json'})
+			r = http.request('POST','http://192.168.1.114:5000/api/v0/tokens', headers=headers)
+			r = json.loads(r.data.decode('utf-8'))
+			if 'token' in r.keys():
+				token = r['token']
+				print('Nuevo token!')
 
-	# Tiempo entre ciclos
 	time.sleep(5)

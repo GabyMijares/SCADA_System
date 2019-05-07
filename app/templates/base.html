@@ -16,13 +16,13 @@
   <!-- CSS Files -->
 
   <link href="{{ url_for('static', filename='assets/css/material-dashboard.css')}}" rel="stylesheet" />
-
+  <link href="{{ url_for('static', filename='assets/css/material-dashboard-extra2.css')}}" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="{{ url_for('static', filename='assets/demo/demo.css')}}" rel="stylesheet" />
 </head>
 
 <body class="">
-    <div class="wrapper ">
+  <div class="wrapper ">
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="{{ url_for('static', filename='assets/img/sidebar-1.jpg')}}">
     <!--<div class="sidebar" data-color="purple" data-background-color="white" >-->
       <!--
@@ -37,26 +37,26 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item active  ">
+          <li class="nav-item {% if context['url'] == 'dashboard' %} active {% endif %} ">
             <a class="nav-link" href="{{ url_for('dashboard')}}">
               <i class="material-icons">dashboard</i>
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item {% if context['url'] == 'tables' %} active {% endif %}">
             <a class="nav-link" href="{{ url_for('tables')}}">
               <i class="material-icons">content_paste</i>
               <p>Historial</p>
             </a>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item {% if context['url'] == 'charts' %} active {% endif %} ">
             <a class="nav-link" href="./tables.html">
               <i class="material-icons">timeline</i>
               <p>Gráficas</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./typography.html">
+          <li class="nav-item {% if context['url'] == 'agenda' %} active {% endif %} ">
+            <a class="nav-link" href="{{ url_for('agenda')}}">
               <i class="material-icons">import_contacts</i>
               <p>Agenda</p>
             </a>
@@ -74,13 +74,12 @@
         </ul>
       </div>
     </div>
-
     <div class="main-panel">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand">Dashboard</a>
+            <a class="navbar-brand">Historial</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -109,8 +108,10 @@
       </nav>
       <!-- End Navbar -->
  
-  {% block content %}
-  {% endblock %}
+    {% block content %}
+
+    {% endblock %}
+
       <footer class="footer">
         <div class="container-fluid">
           <div class="copyright float-right">
@@ -125,14 +126,34 @@
   </div>
   {% block js %}
   <!--   Core JS Files   -->
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.13/js/perfect-scrollbar.jquery.min.js"></script>-->
+
   <script src="{{ url_for('static', filename='assets/js/core/jquery.min.js')}}"></script>
   <script src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
   <script src="{{ url_for('static', filename='assets/js/core/bootstrap-material-design.min.js')}}"></script>
   <script src="{{ url_for('static', filename='assets/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap-selectpicker.js')}}"></script>
   <!-- Plugin for the momentJs  -->
-  {{ moment.include_moment() }}
-  {{ moment.lang("es") }}
+  {{ moment.include_moment(version='2.24.0') }}
+  {{ moment.lang("es-us") }}
   <!--  Plugin for Sweet Alert -->
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.24.1/sweetalert2.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jvectormap/2.0.4/jquery-jvectormap.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.min.js"></script>-->
+  <!--  Notifications Plugin    -->
+  <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap-notify.js')}}"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{{ url_for('static', filename='assets/js/material-dashboard.js', type='text/javascript')}} "></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.10/js/demo.js"></script>-->
+  <script src="{{ url_for('static', filename='assets/js/switcher.js')}}"></script>
+
   <script src="{{ url_for('static', filename='assets/js/plugins/sweetalert2.js')}}"></script>
   
   <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
@@ -143,14 +164,12 @@
   <script src="{{ url_for('static', filename='assets/js/plugins/arrive.min.js')}}"></script>
   <!-- Chartist JS -->
   <script src="{{ url_for('static', filename='assets/js/plugins/chartist.min.js')}}"></script>
-  <!--  Notifications Plugin    -->
-  <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap-notify.js')}}"></script>
-  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="{{ url_for('static', filename='assets/js/material-dashboard.js', type='text/javascript')}} "></script>
+
+
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="{{ url_for('static', filename='assets/demo/demo.js')}}"></script>
 
-  <script src="{{ url_for('static', filename='assets/js/switcher.js')}}"></script>
+
   <script>
     $(document).ready(function() {
       $().ready(function() {

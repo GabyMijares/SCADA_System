@@ -77,3 +77,13 @@ class Respuesta(db.Model):
             'fecha': self.fecha.isoformat() + 'Z'
         }
         return data
+
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", backref="posts")
+    title = db.Column(db.String(32))
+    text = db.Column(db.String(255))
+    type = db.Column(db.String(32))
+    fecha = db.Column(db.DateTime, default=datetime.utcnow)

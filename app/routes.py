@@ -3,8 +3,8 @@ from flask import render_template, flash, redirect, request, url_for, jsonify, g
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import func
-from app.models import User, Respuesta
-from app.forms import LoginForm
+from app.models import User, Respuesta, Post
+from app.forms import LoginForm, PostForm
 from app.helper import error_response, translate
 from werkzeug.urls import url_parse
 
@@ -46,26 +46,60 @@ def dashboard():
     'conv_tsb':translate['conv_tsb'],
     'conv_status':translate['conv_status'],
     'conv_alarmas':translate['conv_alarmas'],
-    'state':state
+    'state':state,
+    'url':'dashboard'
     }
     return render_template('dashboard.html',  context=context)
     
 
 @app.route('/tables')
+@login_required
 def tables():
+    page = request.args.get('page', 1, type=int)
     data = Respuesta.query.order_by(Respuesta.id.desc()).first_or_404()
     table = db.session.query(Respuesta.grp,func.min(Respuesta.fecha).label("inicio"),\
                         func.max(Respuesta.fecha).label("final"),\
                         func.avg(Respuesta.corriente).label("avgcorriente"),\
                         func.avg(Respuesta.presion).label("avgpresion"))\
                         .filter(Respuesta.encendido == True)\
-                        .group_by(Respuesta.grp).all()
+                        .group_by(Respuesta.grp).order_by(Respuesta.grp.desc())\
+                        .paginate(page, app.config['ROWS_PER_TABLE'], False)
+    #perol = Respuesta.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
     context = { 
     'data': data,
     'table':table,
+    'url':'tables'
     }
-    return render_template('tables.html',  context=context)
+    next_url = url_for('tables', page=table.next_num) \
+        if table.has_next else None
+    prev_url = url_for('tables', page=table.prev_num) \
+        if table.has_prev else None
+    return render_template('tables.html',  context=context, next_url=next_url,
+                           prev_url=prev_url, table=table.items)
 
+@app.route('/agenda', methods=['GET', 'POST'])
+@login_required
+def agenda():
+    page = request.args.get('page', 1, type=int)
+    q = Respuesta.query.order_by(Respuesta.id.desc()).first_or_404()
+    context = { 
+    'data': q,
+    'url':'agenda',
+    'page': page
+    }
+    form = PostForm()
+    if  form.validate_on_submit():
+        new_post = Post(title = form.title.data, text = form.text.data, type = form.type.data, user = current_user)
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for("agenda"))
+    publi = Post.query.order_by(Post.id.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('agenda', page=publi.next_num) \
+        if publi.has_next else None
+    prev_url = url_for('agenda', page=publi.prev_num) \
+        if publi.has_prev else None        
+    return render_template('agenda.html',  context=context, form=form, next_url=next_url,
+                           prev_url=prev_url, publi=publi.items)
 
 '''
     En la siguiente parte se realiza
