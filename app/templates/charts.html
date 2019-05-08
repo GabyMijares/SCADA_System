@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-chart">
+                <div class="card-header card-header-success">
+                  <div class="ct-chart" id="presion"></div>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">Presion de Aceite</h4>
+                  <p class="card-category">
+                    <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> el valor nominal oscila entre 30 PSI y 40 PSI.</p>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">access_time</i> Ultimas 2 semanas.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="card card-chart">
+                <div class="card-header card-header-warning">
+                  <div class="ct-chart" id="websiteViewsChart"></div>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">Email Subscriptions</h4>
+                  <p class="card-category">Last Campaign Performance</p>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">access_time</i> campaign sent 2 days ago
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="card card-chart">
+                <div class="card-header card-header-danger">
+                  <div class="ct-chart" id="completedTasksChart"></div>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">Completed Tasks</h4>
+                  <p class="card-category">Last Campaign Performance</p>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">access_time</i> campaign sent 2 days ago
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+ 
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='assets/js/temporizador.js')}}"></script>
+<script type="text/javascript">
+    $(function(){
+        console.log(new Date("{{context['charts'][0].fecha.isoformat() }}"))
+        dataPresion = {
+        series: [{
+        name: 'series-1',
+        data: [
+          {% for f in context['charts'] %}
+          {x: new Date("{{f.fecha.isoformat()}}"), y: {{f.presion}} },
+          {% endfor %}
+        ]
+        }]
+      };
+
+      optionsPresion = {
+        lineSmooth: Chartist.Interpolation.cardinal({
+    tension: 1,
+    fillHoles: false
+  }),
+        showPoint: false,
+        low: 0,
+        high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        chartPadding: {
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0
+        },
+        axisX: {
+          type: Chartist.FixedScaleAxis,
+          divisor: 5,
+          labelInterpolationFnc: function(value) {
+            return moment(value).format('LT');
+          }
+        }
+      }
+      var dailySalesChart = new Chartist.Line('#presion', dataPresion, optionsPresion);
+      md.startAnimationForLineChart(dailySalesChart);
+    });
+</script>
+{% endblock %}

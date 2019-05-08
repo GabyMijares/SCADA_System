@@ -50,7 +50,7 @@
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="./tables.html">
+            <a class="nav-link" href="{{ url_for('charts')}}">
               <i class="material-icons">timeline</i>
               <p>Gráficas</p>
             </a>
@@ -142,7 +142,7 @@
   <!-- Library for adding dinamically elements -->
   <script src="{{ url_for('static', filename='assets/js/plugins/arrive.min.js')}}"></script>
   <!-- Chartist JS -->
-  <script src="{{ url_for('static', filename='assets/js/plugins/chartist.min.js')}}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.js"></script>
   <!--  Notifications Plugin    -->
   <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap-notify.js')}}"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->

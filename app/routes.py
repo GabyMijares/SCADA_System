@@ -66,6 +66,16 @@ def tables():
     }
     return render_template('tables.html',  context=context)
 
+@app.route('/charts')
+def charts():
+    data = Respuesta.query.order_by(Respuesta.id.desc()).first_or_404()
+    charts = Respuesta.query.order_by(Respuesta.id.desc()).limit(40)
+    context = { 
+    'data': data,
+    'charts':charts
+    }
+    return render_template('charts.html',  context=context)
+
 
 '''
     En la siguiente parte se realiza
