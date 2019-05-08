@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
       <div class="content">
         <div class="container-fluid">
           {% if context['data'].alarma != 0 %}
@@ -144,5 +143,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{{ url_for('static', filename='assets/js/temporizador.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/material-dashboard.min.js')}}"></script>
 {% endblock %}

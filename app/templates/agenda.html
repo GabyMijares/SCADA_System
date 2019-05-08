@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+          {% if context['page'] == 1 %}
+            <div class="col-md-9">
+              <div class="card ">
+                <div class="card-header card-header-primary card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">mail_outline</i>
+                  </div>
+                  <h4 class="card-title text-center">Añadir nueva anotación</h4>
+                </div>
+                <div class="card-body ">
+                  <form id="send_post" method="POST" action="" class="form-horizontal">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                      <div class="col-sm-8">
+                        <div class="form-group bmd-form-group">
+                          {{ form.title(type="text", placeholder="Título", class="form-control") }}
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="form-group bmd-form-group">
+                          {{ form.type(class="form-control") }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <div class="form-group bmd-form-group">
+                            {{ form.text(placeholder="Publica una nueva actualización", class="form-control", rows="3") }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="card-footer ml-auto">
+                  <button type="submit" form="send_post" class="btn btn-just-icon btn-round btn-success">
+                          <i class="material-icons">check</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+            <div class="col-md-9">
+              <ul class="timeline timeline-simple">
+                {% for p in publi %}
+                <li class="timeline-inverted">
+                  <div class="timeline-badge {{ p.type|post_color }}">
+                    <i class="material-icons">{{ p.type|post_icon }}</i>
+                  </div>
+                  <div class="timeline-panel">
+                    <div class="timeline-heading">
+                      <span class="badge badge-pill badge-{{ p.type|post_color }}">{{ p.title }}</span>
+                    </div>
+                    <div class="timeline-body">
+                      <p> {{ p.text }}</p>
+                    </div>
+                    <h6>
+                      <i class="ti-time"></i>Publicado por <b>{{ p.user.username }}</b> {{ moment(p.fecha).calendar() }} 
+                    </h6>
+                  </div>
+                </li> 
+                {% else %}
+                 <h1> No hay posts</h1>
+                {% endfor %}             
+              </ul>
+            </div>
+          </div>
+          <div class="col text-center">
+            {% if prev_url %}
+              <a class="btn btn-primary" href="{{ prev_url }}">Anterior</a>
+            {% endif %}
+
+            {% if next_url %}
+              <a class="btn btn-primary" href="{{ next_url }}">Siguiente</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

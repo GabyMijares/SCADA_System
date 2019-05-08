@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
       <div class="content">
         <div class="container-fluid">
           <div class="row">
@@ -25,37 +24,50 @@
                           Duración
                         </th>
                         <th>
-                          Corriente promedio
+                          Corriente promedio (A)
                         </th>
                         <th>
-                          Presion promedio
+                          Presion promedio (PSI)
                         </th>
                        </thead>
+
                       <tbody>
-                      {% for r in context['table'] %}
-                        <tr>
-                          <td>
-                            {{ moment(r.inicio).calendar() }}
-                          </td>
-                          <td>
-                            {{ moment(r.final).calendar() }}
-                          </td>
-                          <td>
-                            {{ r.final - r.inicio }}
-                          </td>
-                          <td>
-                            {{ r.avgcorriente }}
-                          </td>
-                          <td>
-                            {{ r.avgpresion }}
-                          </td>
-                        </tr>
-                      {% endfor %}
+                        {% for r in table %}
+                          <tr>
+                            <td>
+                              {{ moment(r.inicio).calendar() }}
+                            </td>
+                            <td>
+                              {{ moment(r.final).calendar() }}
+                            </td>
+                            <td>
+                              {{ (r.final - r.inicio)|duration }}
+                            </td>
+                            <td>
+                              {{ r.avgcorriente }}
+                            </td>
+                            <td>
+                              {{ r.avgpresion }}
+                            </td>
+                        {% endfor %}
+                          </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="col text-center">
+              {% if prev_url %}
+                <a class="btn btn-primary" href="{{ prev_url }}">Anterior</a>
+              {% endif %}
+
+              {% if next_url %}
+                <a class="btn btn-primary" href="{{ next_url }}">Siguiente</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
 
 {% endblock %}
