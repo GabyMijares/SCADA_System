@@ -47,7 +47,7 @@ def dashboard():
     'conv_status':translate['conv_status'],
     'conv_alarmas':translate['conv_alarmas'],
     'state':state,
-    'url':'dashboard'
+    'url':'Dashboard'
     }
     return render_template('dashboard.html',  context=context)
     
@@ -68,7 +68,7 @@ def tables():
     context = { 
     'data': data,
     'table':table,
-    'url':'tables'
+    'url':'Historial'
     }
     next_url = url_for('tables', page=table.next_num) \
         if table.has_next else None
@@ -84,7 +84,7 @@ def agenda():
     q = Respuesta.query.order_by(Respuesta.id.desc()).first_or_404()
     context = { 
     'data': q,
-    'url':'agenda',
+    'url':'Agenda',
     'page': page
     }
     form = PostForm()
