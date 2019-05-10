@@ -9,7 +9,6 @@ import calendar
 from datetime import datetime
 
 app = Flask(__name__)
-app.json_encoder = CustomJSONEncoder
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)

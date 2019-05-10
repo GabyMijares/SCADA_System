@@ -49,13 +49,8 @@
               <p>Historial</p>
             </a>
           </li>
-<<<<<<< HEAD
-          <li class="nav-item ">
-            <a class="nav-link" href="{{ url_for('charts')}}">
-=======
           <li class="nav-item {% if context['url'] == 'charts' %} active {% endif %} ">
-            <a class="nav-link" href="./tables.html">
->>>>>>> upstream/master
+            <a class="nav-link" href="{{ url_for('charts')}}">
               <i class="material-icons">timeline</i>
               <p>Gráficas</p>
             </a>
@@ -131,10 +126,10 @@
   </div>
   {% block js %}
   <!--   Core JS Files   -->
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.13/js/perfect-scrollbar.jquery.min.js"></script>-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.13/js/perfect-scrollbar.jquery.min.js"></script>
 
   <script src="{{ url_for('static', filename='assets/js/core/jquery.min.js')}}"></script>
   <script src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
@@ -155,7 +150,6 @@
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{{ url_for('static', filename='assets/js/material-dashboard.js', type='text/javascript')}} "></script>
   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.10/js/demo.js"></script>-->
   <script src="{{ url_for('static', filename='assets/js/switcher.js')}}"></script>
 
@@ -177,7 +171,7 @@
 
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="{{ url_for('static', filename='assets/demo/demo.js')}}"></script>
-
+  
 
   <script>
     $(document).ready(function() {
