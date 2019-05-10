@@ -7,7 +7,7 @@ from app.models import User, Respuesta, Post
 from app.forms import LoginForm, PostForm
 from app.helper import error_response, translate
 from werkzeug.urls import url_parse
-
+from datetime import datetime, timedelta
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
 
@@ -40,6 +40,8 @@ def logout():
 @login_required
 def dashboard():
     q = Respuesta.query.order_by(Respuesta.id.desc()).first_or_404()
+    charts = Respuesta.query.filter(Respuesta.fecha >= (datetime.utcnow()-timedelta(hours=1)), Respuesta.id % 20 == 0)\
+            .order_by(Respuesta.id.desc()).all()
     context = { 
     'data': q,
     'conv_tqc':translate['conv_tqc'],
@@ -47,7 +49,8 @@ def dashboard():
     'conv_status':translate['conv_status'],
     'conv_alarmas':translate['conv_alarmas'],
     'state':state,
-    'url':'Dashboard'
+    'url':'Dashboard',
+    'charts':charts
     }
     return render_template('dashboard.html',  context=context)
     
@@ -101,6 +104,20 @@ def agenda():
     return render_template('agenda.html',  context=context, form=form, next_url=next_url,
                            prev_url=prev_url, publi=publi.items)
 
+
+@app.route('/charts')
+def charts():
+    data = Respuesta.query.order_by(Respuesta.id.desc()).first_or_404()
+    charts = Respuesta.query.filter(Respuesta.fecha >= (datetime.utcnow()-timedelta(days=1)), Respuesta.id % 100 == 0)\
+             .order_by(Respuesta.id.desc()).all()
+    print(charts)
+    context = { 
+    'data': data,
+    'charts':charts,
+    'url':'Gráficas'
+    }
+    return render_template('charts.html',  context=context)
+    
 '''
     En la siguiente parte se realiza
     todo lo necesario para la API

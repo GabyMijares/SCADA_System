@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from config import Config
+from flask.json import JSONEncoder
+import calendar
+from datetime import datetime
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -16,6 +19,18 @@ moment = Moment(app)
 @app.template_filter('duration')
 def caps(delta):
     return str(delta).split('.')[0]
+
+@app.template_filter('rounder')
+def rounder(delta):
+    return round(delta,2)
+
+@app.template_filter('converter')
+def converter(delta):
+    return 'ON' if delta else 'OFF'   #On si es TRUE si no, False
+
+@app.template_filter('button')
+def button(delta):
+    return 'Apagar planta electrica' if delta else 'Encender planta electrica'   #On si es TRUE si no, False
 
 @app.template_filter('post_icon')
 def post_icon(delta):

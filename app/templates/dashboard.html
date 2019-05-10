@@ -90,10 +90,10 @@
             <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-success">
-                  <div class="ct-chart" id="dailySalesChart"></div>
+                  <div class="ct-chart" id="volt_ky"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Daily Sales</h4>
+                  <h4 class="card-title">Voltaje del servicio electrico</h4>
                   <p class="card-category">
                     <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
                 </div>
@@ -107,10 +107,10 @@
             <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-warning">
-                  <div class="ct-chart" id="websiteViewsChart"></div>
+                  <div class="ct-chart" id="volt_pe"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Email Subscriptions</h4>
+                  <h4 class="card-title">Voltaje de la planta</h4>
                   <p class="card-category">Last Campaign Performance</p>
                 </div>
                 <div class="card-footer">
@@ -123,10 +123,10 @@
             <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-danger">
-                  <div class="ct-chart" id="completedTasksChart"></div>
+                  <div class="ct-chart" id="volt_bat"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Completed Tasks</h4>
+                  <h4 class="card-title">Voltaje bateria de encendido</h4>
                   <p class="card-category">Last Campaign Performance</p>
                 </div>
                 <div class="card-footer">
@@ -145,4 +145,121 @@
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='assets/js/temporizador.js')}}"></script>
+<script type="text/javascript">
+  $(function(){
+      dataVolt_ky = {
+      series: [{
+      name: 'series-1',
+      data: [
+        {% for f in context['charts'] %}
+        {x: new Date("{{f.fecha.isoformat()}}Z"), y: {{f.volt_ky}} },
+        {% endfor %}
+      ]
+      }]
+    };
+
+    dataVolt_pe = {
+      series: [{
+      name: 'puntos',
+      data: [
+        {% for f in context['charts'] %}
+        {x: new Date("{{f.fecha.isoformat()}}Z"), y: {{f.volt_pe}} },
+        {% endfor %}
+      ]
+      }]
+    };
+
+    dataVolt_bat = {
+      series: [{
+      name: 'puntos',
+      data: [
+        {% for f in context['charts'] %}
+        {x: new Date("{{f.fecha.isoformat()}}Z"), y: {{f.volt_bat}} },
+        {% endfor %}
+      ]
+      }]
+    };
+
+    optionsVolt_ky = {
+      lineSmooth: Chartist.Interpolation.cardinal({
+  tension: 1,
+  fillHoles: false
+}),
+      showPoint: false,
+      low: 0,
+      high: 250, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+      chartPadding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      },
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        divisor: 3,
+        labelInterpolationFnc: function(value) {
+          return moment(value).format('LT');
+        }
+      }
+    }
+
+    optionsVolt_pe = {
+      lineSmooth: Chartist.Interpolation.cardinal({
+  tension: 1,
+  fillHoles: false
+}),
+      showPoint: false,
+      low: 100,
+      high: 245, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+      chartPadding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      },
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        divisor: 3,
+        labelInterpolationFnc: function(value) {
+          return moment(value).format('LT');
+        }
+      }
+    }
+
+    optionsVolt_bat = {
+      lineSmooth: Chartist.Interpolation.cardinal({
+  tension: 1,
+  fillHoles: false
+}),
+      showPoint: false,
+      low: 0,
+      high: 16, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+      chartPadding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      },
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        divisor: 3,
+        labelInterpolationFnc: function(value) {
+          return moment(value).fromNow();
+        }
+      },
+      /**axisY: {
+        labelInterpolationFnc: function(value){
+          return value + " v";
+        }
+      }**/
+    }
+
+    var Volt_kyChart = new Chartist.Line('#volt_ky', dataVolt_ky, optionsVolt_ky);
+    md.startAnimationForLineChart(Volt_kyChart);
+    var Volt_peChart = new Chartist.Line('#volt_pe', dataVolt_pe, optionsVolt_pe);
+    md.startAnimationForLineChart(Volt_peChart);
+    var Volt_batChart = new Chartist.Line('#volt_bat', dataVolt_bat, optionsVolt_bat);
+    md.startAnimationForLineChart(Volt_batChart);
+  });
+</script>
 {% endblock %}

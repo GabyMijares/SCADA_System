@@ -37,17 +37,23 @@
                             <td>
                               {{ moment(r.inicio).calendar() }}
                             </td>
+                            
                             <td>
+                            {% if context['data'].encendido and loop.index == 1 %}  
+                              -
+                            {% else %}
                               {{ moment(r.final).calendar() }}
+                            {% endif %}
                             </td>
+                            
                             <td>
                               {{ (r.final - r.inicio)|duration }}
                             </td>
                             <td>
-                              {{ r.avgcorriente }}
+                              {{ r.avgcorriente|rounder }}
                             </td>
                             <td>
-                              {{ r.avgpresion }}
+                              {{ r.avgpresion|rounder }}
                             </td>
                         {% endfor %}
                           </tr>
