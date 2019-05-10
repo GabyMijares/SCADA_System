@@ -20,6 +20,18 @@ moment = Moment(app)
 def caps(delta):
     return str(delta).split('.')[0]
 
+@app.template_filter('rounder')
+def rounder(delta):
+    return round(delta,2)
+
+@app.template_filter('converter')
+def converter(delta):
+    return 'ON' if delta else 'OFF'   #On si es TRUE si no, False
+
+@app.template_filter('button')
+def button(delta):
+    return 'Apagar planta electrica' if delta else 'Encender planta electrica'   #On si es TRUE si no, False
+
 @app.template_filter('post_icon')
 def post_icon(delta):
     conv = {"info":"create", "danger":"build", "warning":"warning", "success":"assignment_turned_in"}

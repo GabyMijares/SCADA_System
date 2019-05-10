@@ -34,6 +34,7 @@ while True:
 	if token:
 		encoded_data = json.dumps(data).encode('utf-8')
 		headers = ({'Content-Type': 'application/json','Authorization': 'Bearer {}'.format(token)})
+	try:
 		r = http.request('POST','http://192.168.1.114:5000/api/v0/send_data',body=encoded_data,	headers=headers)
 		if r.status == 200:
 			r = json.loads(r.data.decode('utf-8'))
@@ -60,5 +61,7 @@ while True:
 			if 'token' in r.keys():
 				token = r['token']
 				print('Nuevo token!')
+	except expression as identifier:
+		pass
 
 	time.sleep(5)
