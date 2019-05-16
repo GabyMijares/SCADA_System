@@ -24,6 +24,11 @@ def caps(delta):
 def rounder(delta):
     return round(delta,2)
 
+@app.template_filter('convalarma')
+def convalarma(delta):
+    conv = {0:"Ninguna", 1:"Encender", 2:"Temp", 3:"Presion", 4:"Veloc"}
+    return conv[delta]
+
 @app.template_filter('converter')
 def converter(delta):
     return 'ON' if delta else 'OFF'   #On si es TRUE si no, False

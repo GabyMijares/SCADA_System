@@ -67,10 +67,13 @@ def tables():
                         .filter(Respuesta.encendido == True)\
                         .group_by(Respuesta.grp).order_by(Respuesta.grp.desc())\
                         .paginate(page, app.config['ROWS_PER_TABLE'], False)
-    #perol = Respuesta.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    tablealarma = db.session.query(Respuesta.grp,func.max(Respuesta.alarma).label("maxalarma"))\
+                        .filter(Respuesta.encendido == False).group_by(Respuesta.grp)\
+                        .order_by(Respuesta.grp.desc()).paginate(page, app.config['ROWS_PER_TABLE'], False)
     context = { 
     'data': data,
     'table':table,
+    'tablealarma':tablealarma,
     'url':'Historial'
     }
     next_url = url_for('tables', page=table.next_num) \

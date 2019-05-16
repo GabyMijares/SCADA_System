@@ -29,6 +29,9 @@
                         <th>
                           Presion promedio (PSI)
                         </th>
+                        <th>
+                          Alarma
+                        </th>
                        </thead>
 
                       <tbody>
@@ -54,6 +57,11 @@
                             </td>
                             <td>
                               {{ r.avgpresion|rounder }}
+                            </td>
+                        {% endfor %}
+                        {% for r in tablealarma %}
+                            <td>
+                              {{ r.maxalarma|convalarma }}
                             </td>
                         {% endfor %}
                           </tr>

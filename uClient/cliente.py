@@ -10,8 +10,8 @@ except Exception as e:
 
 http = urllib3.PoolManager()
 
-email= "wgaby@gmail.com"
-password="123456"
+email= "ingetel2008@hotmail.com"
+password="CATIRA159357"
 token=""
 
 while True:

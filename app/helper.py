@@ -3,7 +3,7 @@ from werkzeug.http import HTTP_STATUS_CODES
 
 translate = {
     'conv_tqc':{1:'Full', 2:'3/4', 3:'Medio', 4:'1/4', 5:'Dañado'},
-    'conv_tsb':{1:'Full', 2:'Vacio', 3:'Llenando'},
+    'conv_tsb':{1:'Full', 2:'Vacio', 3:'Llenando', 4:'Revisar'},
     'conv_status':{0:'OFF', 1:'ON'},
     'conv_alarmas':{0:'Ok', 1:'Falla al encender la planta eléctrica.',\
                     2:'Alta temperatura en el motor de la planta eléctrica.', \
