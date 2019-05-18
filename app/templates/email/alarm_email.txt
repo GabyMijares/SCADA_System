@@ -1,0 +1,10 @@
+Alerta!
+
+Se ha producido la siguiente falla en el sistema:
+
+{{ type }}
+
+Por favor, solucione cuanto antes el problema para restablercer la operacion de la planta electrica.
+
+Sistema SCADA.
+INGETEL, C.A.
