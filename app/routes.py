@@ -5,13 +5,14 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import func
 from app.models import User, Respuesta, Post
 from app.forms import LoginForm, PostForm
+from app.email import send_alarm_email
 from app.helper import error_response, translate
 from werkzeug.urls import url_parse
 from datetime import datetime, timedelta
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
 
-state = {}
+state = {'alarma':0}
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -155,7 +156,6 @@ def get_token():
 @token_auth.login_required
 def send_data():
     data  = request.get_json()
-    print(data)
     group = Respuesta.query.order_by(Respuesta.id.desc()).first()
     if group:
         if ( group.encendido == data['encendido']):
@@ -174,6 +174,17 @@ def send_data():
     msg = {'msg':False}
     if 'action' in state.keys():
         msg.update({'msg': state.pop('action')})
+    if (data['alarma'] != state['alarma']) and (data['alarma'] != 0):
+        print("Acaa")
+        user = User.query.filter(User.type == 2).first()
+        p = Post(title = "Alarma", text = translate['conv_alarmas'][data['alarma']], type = 'danger', user = user)
+        db.session.add(p)
+        db.session.commit()
+        state['alarma']= data['alarma']
+        if app.config['MAIL_ENABLED']:
+            u = User.query.filter(User.type==1).all()
+            u = [user.email for user in u]
+            send_alarm_email(u, translate['conv_alarmas'][data['alarma']])
     return jsonify(msg)
 
 @app.route('/api/v0/switch', methods=['POST'])
